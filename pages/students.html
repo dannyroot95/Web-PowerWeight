@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  <script src="js/students.js"></script>
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="stylesheet" type="text/css" href="css/style-students.css">
+  <script src="js/alertify.min.js"></script>
+  <link rel="stylesheet" href="css/css/alertify.css" />
+  <link href="js/dist/css/datepicker-bs4.css" rel="stylesheet">
+
+  <title>
+    Sistema control de usuarios - Estudiantes
+  </title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- CSS Files -->
+  <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+  <script src="js/tableJS/jspdf.min.js"></script>
+  <script src="js/tableJS/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body class="g-sidenav-show  bg-gray-200">
+  <script>
+    var theme = localStorage.getItem('theme');
+    if (theme == "dark") {
+    //SwitchTheme.checked = true;
+    document.body.classList.add("dark-version")
+   }
+  </script>
+  <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark" id="sidenav-main">
+    <div class="sidenav-header">
+      <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+      <a class="navbar-brand m-0">
+        <img src="../assets/img/logo-ct.png" class="navbar-brand-img h-100" alt="main_logo">
+        <span class="ms-1  text-white" id="username"></span>
+      </a>
+    </div>
+    <hr class="horizontal light mt-0 mb-2">
+    <div class="collapse navbar-collapse  w-auto  max-height-vh-100" id="sidenav-collapse-main">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link text-white " href="../pages/dashboard.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">dashboard</i>
+            </div>
+            <span class="nav-link-text ms-1">Panel de inicio</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white active" id="barButton">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">face</i>
+            </div>
+            <span class="nav-link-text ms-1">Estudiantes</span>
+          </a>
+        </li>
+
+        <script>
+          var color = localStorage.getItem('color');
+          if (color != null) {
+            if (document.getElementById("barButton").classList.contains('text-white') ){
+              document.getElementById("barButton").classList.add(color);
+            }
+         }else{
+          document.getElementById("barButton").classList.add("bg-gradient-primary");
+         }
+        </script>
+
+        <li class="nav-item">
+          <a class="nav-link text-white " href="../pages/registers.html">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">receipt_long</i>
+            </div>
+            <span class="nav-link-text ms-1">Registros</span>
+          </a>
+        </li>
+    
+        <li class="nav-item mt-3">
+          <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Otras opciones</h6>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" data-toggle="modal" data-target="#reporter-modal">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">inventory</i>
+            </div>
+            <span class="nav-link-text ms-1">Reportes</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+   
+  </aside>
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Página</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Estudiantes</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Estudiantes</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+           
+          </div>
+          <ul class="navbar-nav  justify-content-end">
+            <li class="nav-item d-flex align-items-center">
+            </li>
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item px-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0">
+                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+              </a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="shadow-primary border-radius-lg pt-4 pb-3" id="myPanel">
+                <h6 class="text-white text ps-3">Lista de estudiantes
+                  <button type="button" data-toggle="modal" data-target="#register-studens-modal" style="background: #000;border-color: aliceblue;border-radius: 6px;color: aliceblue;font-family:Roboto;font-weight: 300;margin-left: 5px;">
+                    Nuevo registro</button></h6>
+              </div>
+            </div>
+
+            <script>
+              var color = localStorage.getItem('color');
+              if (color != null) {
+                if (document.getElementById("myPanel").classList.contains('shadow-primary') ){
+                  document.getElementById("myPanel").classList.add(color);
+                }
+             }else{
+              document.getElementById("myPanel").classList.add("bg-gradient-primary");
+             }
+            </script>
+
+            <a id="div-loader" style="position: flex;margin-top: 5%;margin-left: 50%;display: none;"><div class="loader"></div></a>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <div class="input-group mb-2 mt-2">
+                  &nbsp;&nbsp;<input type="text" id="searchBar" style="border: 1px solid #E0E0E0;padding: 15px;" class="form-control" placeholder="Buscar Estudiante..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                      <select class="custom-select" id="typeSelected">
+                          <option selected value="1">DNI</option>
+                          <option value="2">Nombres</option>
+                      </select>
+                    <button class="btn btn-outline-primary ml-1" id="btnSearch" style="width: 150px;" type="button">Buscar</button> &nbsp;
+                    <img src="imgs/reset.png" id="btnReset" width="40px" height="40px" style="display: none;">
+                    &nbsp;&nbsp;
+                  </div>
+                </div>
+
+                <table class="table table-white" id="myTable">
+                  <thead>
+                      <th><font color="black">#</font></th>
+                      <th><font color="black">Nombres</font></th>
+                      <th><font color="black">Código de estudiante</font> </th>
+                      <th><font color="black">DNI</font></th>
+                      <th><font color="black">Estado</font></th>
+                      <th></th>
+                  </thead>
+                  <tbody id="tbody1">
+                  </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="font-weight-bold" onclick="selectAllData()" style="display: none;">Database</a>
+      <!-- Modal -->
+      <div class="modal fade" id="register-studens-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+         <div class="modal-content" id="content-modal1">
+           <div class="modal-header">
+             <h5 class="modal-title" id="exampleModalLongTitle">Registro de estudiante</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+             </button>
+           </div>
+           <div class="modal-body">
+            <form role="form" id="form">
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label">Nombre completo</label>
+              <input type="text" class="form-control" id="fullname-student" >
+            </div>
+
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label">Código de estudiante</label>
+              <input type="number" class="form-control" id="code-student" required maxlength="8" oninput="this.value=this.value.slice(0,this.maxLength)">
+            </div>
+
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label">DNI</label>
+              <input type="number" class="form-control" id="dni-student" required maxlength="8" oninput="this.value=this.value.slice(0,this.maxLength)">
+            </div>
+
+            <label>Carrera profesional</label>
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="selectCarrer" style="border-color: #D5D5D5;">
+              <option value="" selected disabled>Seleccione una opción</option>
+              <option value="Derecho y Ciencias Políticas">Derecho y Ciencias Políticas</option>
+              <option value="Contabilidad y Finanzas">Contabilidad y Finanzas</option>
+              <option value="Administración y Negocios Internacionales">Administración y Negocios Internacionales</option>
+              <option value="Medicina veterinaria">Ecoturismo</option>
+              <option value="Educación Inicial y Especial">Educación Inicial y Especial</option>
+              <option value="Educación Primaria en el área de Informática">Educación Primaria en el área de Informática</option>
+              <option value="Educación Matemática y Computación">Educación Matemática y Computación</option>
+              <option value="Medicina Veterinaria y Zootecnia">Medicina Veterinaria y Zootecnia</option>
+              <option value="Enfermería">Enfermería</option>
+              <option value="Ingeniería Sistemas e Informática">Ingeniería Sistemas e Informática</option>
+              <option value="Ingeniería Agroindustrial">Ingeniería Agroindustrial</option>
+              <option value="Ingeniería Forestal y Medio Ambiente">Ingeniería Forestal y Medio Ambiente</option>
+            </select>           
+
+            <label>Seleccionar sexo</label><p>
+            <form name="sexForm">
+              <input type="radio" id="genderm" name="gender" value="masculino" />
+              <label for="genderm" style="margin-right: 8px;">Masculino</label>
+              <input type="radio" id="genderf" name="gender" value="femenino" />
+              <label for="genderf">Femenino</label>
+          </form></p>
+
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label"></label>
+              <label style="margin: auto;margin-right:8px;color: #3087CF;">Código RFID</label>
+              <input disabled class="form-control" id="rfid-student" style="border-color: #3087CF;">
+            </div>
+            
+             <strong><div id="statusModal"></div></strong>
+            </form>
+   
+           </div>
+           <div class="modal-footer">
+             <button id="registerButton" type="button" class="btn btn-success" onclick="registerStudent()">Registrar</button>
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+
+     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" id="content-modal3">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Detalle de Estudiante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label class="labs">Nombre : <div id="nameModal"></div></label>   
+            <br>
+            <label class="labs">DNI : </label>
+            <input type="text" id="dniModal" disabled="disabled" style="font-weight: bold;"><br>
+            <span><label class="labs">Estado : <div id="myModalStatus"></div> </label>
+               <button style="background-color: #FC0000;font: bold;color: white;border-radius: 4px;;border-color:#fff;display: none;" id="btnDeudor" onclick="changeStatusNotPay()">  <i class="material-icons" style="padding: 5px;">clear</i></button>
+               <button style="background-color: #079235;font: bold;color: white;border-radius: 4px;;border-color:#fff;display: none;" id="btnPagado" onclick="changeStatusPay()">  <i class="material-icons" style="padding: 5px;">check</i></button>
+              </span>
+              <input id="idModal" style="display: none;"></input>
+          </div>
+          <div class="modal-footer">
+            <button id="updateDataButton" type="button" class="btn btn-success" onclick="updateData()" class="close" data-dismiss="modal">Actualizar Datos</button>
+            <button type="button" class="btn btn-danger" onclick="deleteData()" class="close" data-dismiss="modal">Eliminar Estudiante</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="reporter-modal" tabindex="-1" role="dialog" aria-labelledby="reporteModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+       <div class="modal-content" id="content-modal2">
+         <div class="modal-header">
+           <h4 class="modal-title">Crear un nuevo reporte</h4>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+         <div class="modal-body">
+          <form role="form" id="form">
+
+            <div class="input-group input-group-outline my-3">
+              <div class="container">
+              <form>
+                <fieldset>
+                    <legend>Elija una opción</legend>
+                    <label>
+                        <input type="radio" name="valor" value="estudiante" id="radioStudent"> Estudiante
+                    </label>
+                    &nbsp;&nbsp;
+                    <label>
+                        <input type="radio" name="valor" value="fecha" id="radioDate"> Fecha
+                    </label>
+                </fieldset>
+                </form>
+              </div>
+            </div>          
+        </form></p>
+         </div>
+
+         <center><div class="input-group input-group-outline" style="display: none;" id="inputModalStudent">
+          <label class="form-label">Código de estudiante</label>
+          <input type="number" class="form-control" id="codeStudentModal" required maxlength="8" oninput="this.value=this.value.slice(0,this.maxLength)">
+        </div></center>
+
+        <center><a id="checkdatemodal" style="display: none;"> 
+          <div id="range2">Del
+            <input type="text" name="start" id="date1modal"  >
+            <span>al</span>
+            <input type="text" name="end" id="date2modal">
+          </div>
+        </a></center>
+         <div class="modal-footer">
+           <button id="registerButton" type="button" class="btn btn-success" onclick="createReport()">Descargar PDF</button>
+         </div>
+       </div>
+     </div>
+     </div>
+
+    <script src="js/radioButtonEventListener.js"></script>
+
+    <script src="js/dist/js/datepicker-full.js"></script>
+<script>
+
+const elem2 = document.getElementById('range2');
+const datepicker2 = new DateRangePicker(elem2, {
+  buttonClass: 'btn',
+});
+
+</script>
+     
+     <script>
+      var theme = localStorage.getItem('theme');
+     if (theme == "dark") {
+     //SwitchTheme.checked = true;
+     document.getElementById("content-modal1").classList.add("dark-version");
+     document.getElementById("content-modal2").classList.add("dark-version");
+     document.getElementById("content-modal3").classList.add("dark-version");
+    }
+     </script>
+
+      <footer class="footer py-4  ">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>
+                <i class="fa fa-heart"></i> Developed by
+                <a class="font-weight-bold">Danny Samán</a>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+  
+  <div class="fixed-plugin"  onclick="printStudents()" id="floatButton" style="display: none;">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2"  style="background-color: #000;" id="myFloat">
+      <i class="material-icons py-2" style="color:white">inventory</i>
+    </a>
+  </div>
+  
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+
+  <!-- Github buttons -->
+  <script src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
+
+
+  <script>
+    var fullname = localStorage.getItem("username");
+       if(fullname !=null){
+          var span = document.getElementById("username");
+          var txt = document.createTextNode(fullname);
+          span.appendChild(txt); 
+         }
+  </script>
+
+<script async defer src="js/data.js"></script>
+
+<style>
+.table > :not(caption) > * > * {
+	padding: 0.5rem 1.5rem;
+  }
+</style>
+
+</body>
+
+</html>
