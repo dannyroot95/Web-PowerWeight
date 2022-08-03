@@ -3,9 +3,10 @@
 
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
-  <script src="js/students.js"></script>
+  <script src="js/students.js" defer></script>
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <link rel="stylesheet" type="text/css" href="css/style-students.css">
@@ -215,19 +216,26 @@
            </div>
            <div class="modal-body">
             <form role="form" id="form">
+
+              <div class="input-group input-group-outline my-3">
+                <label class="form-label">Código de estudiante</label>
+                <input type="number" class="form-control" id="code-student" required maxlength="8" oninput="this.value=this.value.slice(0,this.maxLength)">
+              </div>
+
+              <div class="input-group input-group-outline my-3">
+                <label style="margin: auto;margin-right:8px;color: #000;display: none;" id="searching">Buscando alumno....</label>
+              </div>
+
             <div class="input-group input-group-outline my-3">
-              <label class="form-label">Nombre completo</label>
-              <input type="text" class="form-control" id="fullname-student" >
+              <label class="form-label"></label>
+              <label style="margin: auto;margin-right:8px;color: #000;">Nombre completo</label>
+              <input disabled class="form-control" id="fullname-student" style="border-color: #000;">
             </div>
 
             <div class="input-group input-group-outline my-3">
-              <label class="form-label">Código de estudiante</label>
-              <input type="number" class="form-control" id="code-student" required maxlength="8" oninput="this.value=this.value.slice(0,this.maxLength)">
-            </div>
-
-            <div class="input-group input-group-outline my-3">
-              <label class="form-label">DNI</label>
-              <input type="number" class="form-control" id="dni-student" required maxlength="8" oninput="this.value=this.value.slice(0,this.maxLength)">
+              <label class="form-label"></label>
+              <label style="margin: auto;margin-right:8px;color: #000;">DNI</label>
+              <input disabled class="form-control" id="dni-student" style="border-color: #000;">
             </div>
 
             <label>Carrera profesional</label>
@@ -383,7 +391,7 @@ const datepicker2 = new DateRangePicker(elem2, {
                   document.write(new Date().getFullYear())
                 </script>
                 <i class="fa fa-heart"></i> Developed by
-                <a class="font-weight-bold">Danny Samán</a>
+                <a class="font-weight-bold">Deivis lópez</a>
               </div>
             </div>
            
