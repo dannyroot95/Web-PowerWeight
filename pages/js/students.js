@@ -16,8 +16,6 @@ var config = {
   };
   firebase.initializeApp(config);
 
- 
-//get data from firebase
 
   firebase.database().ref('codeCard').on('value',function(snapshot){
     if (snapshot.exists()) {
@@ -31,6 +29,18 @@ var config = {
 
   //-------------------------
 
+var inputCodeStudentReceiver = document.getElementById('code-student');
+inputCodeStudentReceiver.addEventListener('input', updateValueR);
+function updateValueR(e) {
+    var code = e.srcElement.value
+    if(code.length == 8){
+     getDataStudent(code) 
+    }else{
+      document.getElementById("fullname-student").value = ""
+      document.getElementById("dni-student").value = ""
+      document.getElementById("searching").style = "display:none;"
+    }
+}
 
   function registerStudent(){
 
@@ -121,4 +131,28 @@ var config = {
     updates['/codeCard/code/'] = "";
     firebase.database().ref().update(updates);
   }
+
+  function getDataStudent(code){
+    document.getElementById("searching").style = "display:inline;"
+    var x =new XMLHttpRequest();
+    x.open('GET',"https://daa-documentos.unamad.edu.pe/api/getStudentInfo/"+code+"?Token=0Bza1wu0mRptGxoFOt1pg99J2a3EU2rxSNwTlTpw8Q==");
+    x.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+    x.onload = function(){
+    var dt = JSON.parse(x.responseText)
+    if(dt != [] && dt != ""){
+      document.getElementById("fullname-student").value = (dt[0].fullName).replace(",","")
+      document.getElementById("dni-student").value = dt[0].dni
+      document.getElementById("searching").style = "display:none;"
+
+    }else{
+      alertify.alert("Alerta!",'Este estudiante no existe en la BASE DE DATOS de la UNAMAD!');
+      document.getElementById("searching").style = "display:none;"
+    }
+    
+};
+x.send();
+}
+
+
+
 
