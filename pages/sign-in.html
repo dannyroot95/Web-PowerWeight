@@ -4,12 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/  https://www.gstatic.com/firebasejs/9.9.0/firebase-auth.js"></script>
+
   <script src="js/login.js"></script>
   <link rel="stylesheet" type="text/css" href="css/style-signin.css">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <script src="js/alertify.min.js"></script>
   <link rel="stylesheet" href="css/css/alertify.min.css" />
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
   <title>
     Sistema control de usuarios - Login
   </title>
@@ -120,6 +129,9 @@
                     No tienes cuenta?
                     <a href="../pages/sign-up.html" class="text-primary text-gradient font-weight-bold">Registrarse</a>
                   </p>
+                  <p class="mt-4 text-sm text-center">
+                    <a class="text-primary text-gradient font-weight-bold" href="" data-toggle="modal" data-target="#modalRecovery" >¿Olvidaste tu constraseña?</a>
+                  </p>
                 </form>
               </div>
             </div>
@@ -136,7 +148,7 @@
                 </script>,
                 <i class="fa fa-heart" aria-hidden="true"></i>
                 <a href="https://www.creative-tim.com" class="font-weight-bold text-white" target="_blank">Developed by</a>
-                Danny Samán.
+                Deivis López.
               </div>
             </div>
             <div class="col-12 col-md-6">
@@ -148,6 +160,33 @@
       </footer>
     </div>
   </main>
+
+  <div class="modal" id="modalRecovery" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Recuperar contraseña</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Ingrese su correo para recuperar su constraseña</p>
+          <p>
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label">Correo</label>
+              <input type="email" class="form-control" id="recoveryEmail">
+            </div>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-rv" class="btn bg-gradient-primary btn-lg w-100 mt-4 mb-0" style="margin-left: 15px;margin-right: 15px;" onclick="recovery()">Recuperar<a style="position: absolute;margin-left: 8px; display: none;" id="div-loader-rv"><div class="loader"></div></a></button>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -167,6 +206,7 @@
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/material-dashboard.min.js?v=3.0.0"></script>
   <script src="js/checkStatus.js"></script>
+  <script src="js/recoveryPassword.js"></script>
   <style>
     .col-2{
       width: 28.66667%;
